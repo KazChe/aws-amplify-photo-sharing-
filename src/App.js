@@ -1,17 +1,19 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
-
-// import API from Amplify library
-import { API } from 'aws-amplify'
-
-// import query definition
+import { API, Auth } from 'aws-amplify'
 import { listPosts } from './graphql/queries'
-
-//import the withAuthenticator component
 import { withAuthenticator } from "@aws-amplify/ui-react";
-
+import {HashRouter, Switch, Route } from "react-router-dom";
+// code for latest version of amplify/ui-react to handle adding sing out button
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+
+// useEffect(() => {
+//     fetchPos
+//     }
+//
+// )
+
+
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -20,7 +22,7 @@ function App() {
   }, []);
   async function fetchPosts() {
     try {
-      const postData = await API.graphql({ query: listPosts });
+      let postData = await API.graphql({ query: listPosts, variables: { limit: 100 } });
       setPosts(postData.data.listPosts.items)
     } catch (err) {
       console.log({ err })
@@ -43,7 +45,7 @@ function App() {
             {({ signOut, user }) => (
                 <div className="App">
                     <p>
-                        Hey {user.username}, welcome to my channel, with auth!
+                        Hey {user.username}, Amplify KICKS ARSE!!
                     </p>
                     <button onClick={signOut}>Sign out</button>
                 </div>
@@ -54,5 +56,6 @@ function App() {
 
   )
 }
+
 
 export default withAuthenticator(App)
